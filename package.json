@@ -1,0 +1,21 @@
+{
+  "name": "todo_app",
+  "version": "0.0.0",
+  "description": "A simple todo list application",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "node node_modules/karma/bin/karma start tests/karma.conf.js"
+  },
+  "author": "Harry Ganz <hganz@rsmas.miami.edu>",
+  "license": "MIT",
+  "devDependencies": {
+    "karma": "~0.13.10",
+    "jasmine": "~2.3.2",
+    "karma-chrome-launcher": "~0.2.0",
+    "karma-firefox-launcher": "~0.1.6",
+    "jasmine-core": "~2.3.4",
+    "karma-jasmine": "~0.3.6"
+  }
+}
