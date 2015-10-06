@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en" ng-app>
+<html lang="en" ng-app="todoApp">
   <head>
     <meta charset="utf-8">
     <title>Todo Application</title>
     <link rel="stylesheet"
     href="./bower_components/bootstrap/dist/css/bootstrap.min.css"
      charset="utf-8">
-     <link rel="stylesheet" href="./app.css" charset="utf-8">
+     <link rel="stylesheet" href="./index.css" charset="utf-8">
   </head>
   <body>
     <div class="container">
@@ -38,13 +38,18 @@
 
       </form>
 
-      <div id=todo-table>
+      <div id="todo-table" ng-controller="TodoListCtrl">
 
         <h3>Todo List</h3>
 
         <table class="table table-striped">
           <tr>
             <th>Name</th> <th>Description</th> <th>Delete</th>
+          </tr>
+          <tr ng-repeat="item in items">
+            <td>{{item.name}}</td>
+            <td>{{item.description}}</td>
+            <td>&nbsp;</td>
           </tr>
         </table>
 
@@ -61,5 +66,6 @@
     <script type="text/javascript"
     src="./bower_components/angular/angular.min.js">
     </script>
+    <script type="text/javascript" src="./app.js"></script>
   </body>
 </html>
