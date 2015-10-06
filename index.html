@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" ng-app>
+  <head>
+    <meta charset="utf-8">
+    <title>Todo Application</title>
+    <link rel="stylesheet"
+    href="./bower_components/bootstrap/dist/css/bootstrap.min.css"
+     charset="utf-8">
+     <link rel="stylesheet" href="./app.css" charset="utf-8">
+  </head>
+  <body>
+    <div class="container">
+
+      <div class="page-header">
+        <h1>Todo Application</h1>
+      </div>
+
+      <form id="todo-form">
+
+        <h3>Add New Todo Item</h3>
+
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" placeholder="Name"
+          class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" rows="8" cols="40"
+          placeholder="Description"
+          class="form-control"></textarea>
+        </div>
+
+        <div class="form-group">
+          <input type="submit" id="add-item" value="Add Item">
+        </div>
+
+      </form>
+
+      <div id=todo-table>
+
+        <h3>Todo List</h3>
+
+        <table class="table table-striped">
+          <tr>
+            <th>Name</th> <th>Description</th> <th>Delete</th>
+          </tr>
+        </table>
+
+      </div>
+    </div>
+
+    <!-- javascript -->
+    <script type="text/javascript"
+    src="./bower_components/jquery/dist/jquery.min.js">
+    </script>
+    <script type="text/javascript"
+    src="./bower_components/bootstrap/dist/js/bootstrap.min.js">
+    </script>
+    <script type="text/javascript"
+    src="./bower_components/angular/angular.min.js">
+    </script>
+  </body>
+</html>

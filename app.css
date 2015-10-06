@@ -1,0 +1,15 @@
+/* Form Styles */
+#todo-form {
+  width: 75%;
+  min-width: 400px;
+  margin: 0 auto;
+}
+
+/* Table Styles */
+#todo-table {
+  width: 75%;
+  min-width: 400px;
+  margin: 40px auto 0 auto;
+  padding-top: 20px;
+  border-top: 1px solid #ddd;
+}
