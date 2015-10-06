@@ -1,0 +1,12 @@
+#!/usr/bin/node
+
+// import app module
+var app = require('./../app');
+
+// find port in environmental variables
+// or use test/development port, 3000
+var port = process.env.PORT || 3000
+
+app.listen(port, function(){
+  console.log('Listening on port ' + port);
+});

@@ -16,4 +16,11 @@ describe('TodoListCtrl', function(){
 
     expect(scope.items[0].name).toBe('Meeting');
   }));
+
+  it('Should have an item with a description containing Gordon', function($controller){
+      var scope = {},
+        ctrl = $controller('TodoListCtrl', {$scope:scope})
+
+      expect(scope.items[1].description).toMatch(/Gordon/i);
+    });
 });
