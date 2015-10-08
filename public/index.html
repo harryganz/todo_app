@@ -49,7 +49,7 @@
           <tr ng-repeat="item in items">
             <td>{{item.name}}</td>
             <td>{{item.description}}</td>
-            <td><button type="button" ng-click="removeItem($index)"
+            <td><button type="button" ng-click="removeItem(item.id)"
               class="btn btn-danger">
             <span class="glyphicon glyphicon-minus"><span>
           </button></td>
