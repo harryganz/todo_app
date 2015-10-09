@@ -20,3 +20,32 @@ describe('Request to static index page', function(){
         expect(/todo/i, done);
     });
 });
+
+describe('Request to /items.html', function(){
+  it('returns a 301 status', function(done){
+      request(app).
+        get('/items.html').
+        expect(301, done);
+  });
+});
+
+describe('Request to /items.json', function(){
+  it('returns a 200 status', function(done){
+      request(app).
+        get('/items.json').
+        expect(200, done);
+  });
+
+  it('returns a json format', function(done){
+      request(app).
+       get('/items.json').
+       expect('Content-Type', /json/i, done);
+  });
+
+  it('returns an item containing "meeting"', function(done){
+      request(app).
+        get('/items.json').
+        expect(/meeting/i, done);
+  });
+
+});

@@ -195,6 +195,16 @@
           "from": "vary@~1.0.1"
         }
       }
+    },
+    "express-negotiate": {
+      "version": "0.0.5",
+      "from": "express-negotiate@",
+      "dependencies": {
+        "mime": {
+          "version": "1.3.4",
+          "from": "mime@>= 0.0.1"
+        }
+      }
     }
   }
 }
