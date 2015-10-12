@@ -1,8 +1,11 @@
 /* Express app, main file*/
 var express = require('express');
 var negotiate = require('express-negotiate');
+var bodyParser = require('body-parser');
+var json = bodyParser.json();
 
 var app = express();
+
 
 // Serve up public directory with angular app
 app.use(express.static('public'));
@@ -31,7 +34,18 @@ app.
           response.redirect(301, '/');
         }
       });
-  });
+    }).
+    post('/items', json, function(request, response){
+      var newItem = request.body;
+      if(!newItem.name || !newItem.description){
+        response.sendStatus(400);
+        return false;
+      } else {
+        items.push({'name': newItem.name, 'description': newItem.description,
+      'id': ++max_id});
 
+        response.status(201).json(newItem.id);
+      }
+    });
 
 module.exports = app;

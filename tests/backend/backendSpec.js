@@ -47,5 +47,32 @@ describe('Request to /items.json', function(){
         get('/items.json').
         expect(/meeting/i, done);
   });
-
 });
+
+describe('Post to /items', function(){
+  var item = {
+    'name':'newItem',
+    'description':'A new item'
+  }
+
+  it('returns a 201 status', function(done){
+    request(app).
+      post('/items').
+      send(item).
+      expect(201, done)
+  });
+
+  it('returns a 400 status for empty data', function(done){
+    request(app).
+      post('/items').
+      send('').
+      expect(400, done);
+  });
+
+  it('successfully adds item with name "newItem"', function(done){
+    request(app).
+      get('/items.json').
+      expect(/newItem/i, done);
+  });
+  
+})
