@@ -15,6 +15,11 @@
         <h1>Todo Application</h1>
       </div>
 
+      <!-- Error messages display here -->
+      <div class="alert alert-danger" ng-show="status" >
+        <span>{{status}}</span>
+      </div>
+
       <form id="todo-form" ng-submit="addItem()">
 
         <h3>Add New Todo Item</h3>

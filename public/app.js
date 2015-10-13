@@ -2,14 +2,15 @@ angular.module('todoApp', [])
   .controller('TodoListCtrl', ['$scope', '$http', function($scope, $http){
     $scope.name ='';
     $scope.description = '';
-    var max_id = 0;
+    $scope.status = '';
 
     $http.get('/items.json').
     success(function(data) {
       $scope.items = data;
+      $scope.status = '';
     }).
     error(function(err){
-      // TODO error handling
+      $scope.status = 'Could not get items';
       $scope.items = [];
     });
 
@@ -17,18 +18,20 @@ angular.module('todoApp', [])
       var name = $scope.name;
       var description = $scope.description;
 
-
       if(name && description) {
         var newItem = {'name': name, 'description': description}
         $http.post('/items', newItem).
-            success(function(){
+            success(function(response){
               $scope.name = '';
               $scope.description = '';
               $scope.items.push(newItem);
+              $scope.status = '';
             }).
-            error(function(err){
-              // TODO error handling
+            error(function(response){
+              $scope.status = 'Could not add new item';
             });
+        } else {
+          $scope.status = 'Missing name or description'
         }
   }
 

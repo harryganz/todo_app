@@ -5,69 +5,90 @@ describe('TodoListCtrl', function(){
   beforeEach(module('todoApp'));
 
   // Declare scope, controller, and mock back-end
-  var scope, ctrl, $httpBackend;
+  var $httpBackend, $rootScope, createController;
 
-  describe('Get list of items', function(){
-    // Mock up backend responses before each test
-    beforeEach(inject(function(_$httpBackend_,
-      $rootScope, $controller){
-        // Set up backend
-        $httpBackend = _$httpBackend_;
-        $httpBackend.expectGET('/items.json').
-          respond([
-            {'name':'Meeting', 'description':'Meeting with city council',
-            'id':1},
-            {'name':'Dr. Appointment', 'description':'Appointment with Dr. Gordon',
-            'id': 2}
-          ]);
+  // Mock up backend, inject scope and controller before each test
+  beforeEach(inject(function($injector){
+    //Set-up mock http service responses
+    $httpBackend = $injector.get('$httpBackend');
+    // Inject scope (rootscope)
+    $rootScope = $injector.get('$rootScope');
+    // Inject controller service
+    var $controller = $injector.get('$controller');
 
-        // Set up scope and controller
-        scope = $rootScope.$new();
-        ctrl = $controller('TodoListCtrl', {$scope: scope});
-    }));
+    createController = function() {
+      return $controller('TodoListCtrl', {'$scope' : $rootScope});
+    };
 
-      it('Should create "items" model with 2 items', function(){
-        expect(scope.items).toBeUndefined();
-        $httpBackend.flush();
+    // Default responses (should be overriden)
+    $httpBackend.when('GET', '/items.json').
+      respond(300);
+  }));
 
-        expect(scope.items.length).toBe(2);
-      });
-
-    it('Should have an item named meeting and an id of 1', function(){
-      expect(scope.items).toBeUndefined();
+  it('Should get two items', function(){
+      var controller = createController();
+      $httpBackend.expectGET('/items.json').
+        respond([
+          {'name':'Meeting', 'description':'Meeting with city council',
+          'id':1},
+          {'name':'Dr. Appointment', 'description':'Appointment with Dr. Gordon',
+          'id': 2}
+        ]);
+      expect($rootScope.items).toBeUndefined();
       $httpBackend.flush();
-
-      expect(scope.items[0].name).toBe('Meeting');
-      expect(scope.items[0].id).toBe(1);
-    });
-
-    it('Should have an item with a description containing Gordon and an id of 2', function(){
-      expect(scope.items).toBeUndefined();
-      $httpBackend.flush();
-
-      expect(scope.items[1].description).toMatch(/Gordon/i);
-      expect(scope.items[1].id).toBe(2);
-      });
+      expect($rootScope.items.length).toBe(2);
+      expect($rootScope.items[0].name).toMatch(/Meeting/i)
   });
 
-  // describe('Add new item', function(){
-  //   beforeEach(inject(function(_$httpBackend_, $rootScope, $controller){
-  //     // Set up backend
-  //     $httpBackend = _$httpBackend_;
-  //     $httpBackend.expectPOST('/item',
-  //       {'name': 'newItem', 'description': 'A new item'}).
-  //       respond(201, '3');
-  //
-  //     scope = $rootScope.$new();
-  //     scope.name = 'newItem';
-  //     scope.description = 'A new item';
-  //     ctrl = $controller('TodoListCtrl', {$scope: scope});
-  //   }));
-  //
-  //   it('Adds an item to items', function(){
-  //     $httpBackend.flush();
-  //
-  //     scope.addItem();
-  //   })
-  // });
+  it('Should return "Could not get items" error', function(){
+    var controller = createController();
+    $httpBackend.expectGET('/items.json').
+      respond(500);
+    expect($rootScope.items).toBeUndefined();
+    $httpBackend.flush();
+    expect($rootScope.status).toBe('Could not get items');
+    expect($rootScope.items.length).toBe(0);
+  });
+
+  it('Should add a new item', function(){
+    // Create controller and add items to scope
+    var controller = createController();
+    $httpBackend.expect('POST','/items').
+        respond(201, '3');
+    $rootScope.name = 'NewItem';
+    $rootScope.description = 'A new item';
+    $rootScope.addItem();
+    $httpBackend.flush();
+    expect($rootScope.status).toBe('');
+  });
+
+  it('Should change status to "Missing name or description"', function(){
+    // Create controller and add items to scope
+    var controller = createController();
+    // Add item if missing both name and description
+    $rootScope.addItem();
+    expect($rootScope.status).toBe("Missing name or description");
+    // Add item missing description
+    $rootScope.name = "Name";
+    expect($rootScope.status).toBe("Missing name or description");
+    // Add item missing Name
+    $rootScope.name = null;
+    $rootScope.description = "A descritpion";
+    $rootScope.addItem();
+    expect($rootScope.status).toBe("Missing name or description");
+  });
+
+  it('Should change status to "Could not add new item"', function(){
+    // Create controller and add items to scope
+    var controller = createController();
+    $rootScope.name = 'Name';
+    $rootScope.description = "A description";
+    // Expect server error
+    $httpBackend.expect('POST','/items').respond(500);
+    // Add Item look at status
+    expect($rootScope.status).toBe('');
+    $rootScope.addItem();
+    $httpBackend.flush();
+    expect($rootScope.status).toBe("Could not add new item")
+  });
 });
