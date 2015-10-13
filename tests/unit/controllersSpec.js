@@ -22,7 +22,7 @@ describe('TodoListCtrl', function(){
 
     // Default responses (should be overriden)
     $httpBackend.when('GET', '/items.json').
-      respond(300);
+      respond(200);
   }));
 
   it('Should get two items', function(){
@@ -34,7 +34,7 @@ describe('TodoListCtrl', function(){
           {'name':'Dr. Appointment', 'description':'Appointment with Dr. Gordon',
           'id': 2}
         ]);
-      expect($rootScope.items).toBeUndefined();
+      expect($rootScope.items.length).toBe(0);
       $httpBackend.flush();
       expect($rootScope.items.length).toBe(2);
       expect($rootScope.items[0].name).toMatch(/Meeting/i)
@@ -44,7 +44,7 @@ describe('TodoListCtrl', function(){
     var controller = createController();
     $httpBackend.expectGET('/items.json').
       respond(500);
-    expect($rootScope.items).toBeUndefined();
+    expect($rootScope.items.length).toBe(0);
     $httpBackend.flush();
     expect($rootScope.status).toBe('Could not get items');
     expect($rootScope.items.length).toBe(0);
@@ -55,12 +55,14 @@ describe('TodoListCtrl', function(){
     var controller = createController();
     $httpBackend.expect('POST','/items').
         respond(201, '3');
+    $httpBackend.expect('GET', '/items.json').
+      respond(200, [{'name': 'NewItem', 'description':'A new Item'}])
+
     $rootScope.name = 'NewItem';
     $rootScope.description = 'A new item';
     $rootScope.addItem();
-    $httpBackend.flush();
     expect($rootScope.status).toBe('');
-    expect($rootScope.items.length).toBe(1);
+    $httpBackend.flush();
   });
 
   it('Should change status to "Missing name or description"', function(){
@@ -96,8 +98,6 @@ describe('TodoListCtrl', function(){
   it('Should delete an exiting item', function(){
       // Set up controller and scope
       var controller = createController();
-      $rootScope.items = [{'name': 'Name', 'description': 'A descritpion',
-      'id': 1}]
       // Expect a delete request
       $httpBackend.expect('DELETE', '/items/1').
         respond(200)
@@ -105,7 +105,6 @@ describe('TodoListCtrl', function(){
       $rootScope.removeItem(1);
       $httpBackend.flush();
       expect($rootScope.status).toBe('');
-      expect($rootScope.items.length).toBe(0);
   });
 
   it('Should return "Could not delete Item"', function(){
@@ -122,13 +121,4 @@ describe('TodoListCtrl', function(){
       $rootScope.status = 'Could not delete item';
   });
 
-  it('Should return "An unknown error occurred"', function(){
-    // Set up controller and scope
-    var controller = createController();
-    $rootScope.items = [{'name': 'Name', 'description': 'A descritpion',
-    'id': 1}]
-    // Try to delete an item that doesn't exist
-    $rootScope.removeItem(2);
-    expect($rootScope.status).toBe('An unknown error occurred')
-  });
 });

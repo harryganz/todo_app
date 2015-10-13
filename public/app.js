@@ -3,16 +3,22 @@ angular.module('todoApp', [])
     $scope.name ='';
     $scope.description = '';
     $scope.status = '';
+    $scope.items = [];
+    // Load Items
+    getItems();
 
-    $http.get('/items.json').
-    success(function(data) {
-      $scope.items = data;
-      $scope.status = '';
-    }).
-    error(function(err){
-      $scope.status = 'Could not get items';
-      $scope.items = [];
-    });
+    // Get items from server
+    function getItems(){
+      $http.get('/items.json').
+      success(function(data) {
+        $scope.status = '';
+        $scope.items = data;
+      }).
+      error(function(err){
+        $scope.status = 'Could not get items';
+        $scope.items = [];
+      });
+    };
 
     $scope.addItem = function(){
       var name = $scope.name;
@@ -24,7 +30,7 @@ angular.module('todoApp', [])
             success(function(response){
               $scope.name = '';
               $scope.description = '';
-              $scope.items.push(newItem);
+              getItems();
               $scope.status = '';
             }).
             error(function(response){
@@ -36,22 +42,14 @@ angular.module('todoApp', [])
     }
 
     $scope.removeItem = function(id){
-      var index = $scope.items.map(function(obj){
-        return obj.id;
-      }).indexOf(id);
-
-      if(index > -1){
-        $http.delete('/items/'+id).
-          success(function(response){
-            $scope.items.splice(index, 1);
-            $scope.status = '';
-          }).
-          error(function(response){
-            $scope.status = 'Could not delete item';
-          });
-      } else {
-        $scope.status = 'An unknown error occurred';
-      }
+      $http.delete('/items/'+id).
+        success(function(response){
+          getItems();
+          $scope.status = '';
+        }).
+        error(function(response){
+          $scope.status = 'Could not delete item';
+        });
     }
 
   }]);
