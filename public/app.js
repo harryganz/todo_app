@@ -33,15 +33,25 @@ angular.module('todoApp', [])
         } else {
           $scope.status = 'Missing name or description'
         }
-  }
+    }
 
     $scope.removeItem = function(id){
-      var index = $scope.items.map(function(obj, index){
-        if(obj.id === id){
-          return index
-        }
-      }).filter(isFinite)[0]
+      var index = $scope.items.map(function(obj){
+        return obj.id;
+      }).indexOf(id);
 
-      $scope.items.splice(index, 1);
-    };
+      if(index > -1){
+        $http.delete('/items/'+id).
+          success(function(response){
+            $scope.items.splice(index, 1);
+            $scope.status = '';
+          }).
+          error(function(response){
+            $scope.status = 'Could not delete item';
+          });
+      } else {
+        $scope.status = 'An unknown error occurred';
+      }
+    }
+
   }]);
