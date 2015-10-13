@@ -15,7 +15,7 @@ app.use(express.static('public'));
 var max_id = 0;
 var items = [
   {'name':'Meeting', 'description':'Meeting with city council',
-  'id':++max_id},
+  'id': ++max_id},
   {'name':'Dr. Appointment', 'description':'Appointment with Dr. Gordon',
   'id': ++max_id}
 ];
@@ -45,6 +45,21 @@ app.
       'id': ++max_id});
 
         response.status(201).json(newItem.id);
+      }
+    }).
+    delete('/items/:id', function(request, response){
+      // Get ID
+      var id = parseInt(request.params.id);
+      // Find index
+      var index = items.map(function(x){
+        return x.id;
+      }).indexOf(id);
+      // If index exists, delete it
+      if(index > -1){
+        items.splice(index, 1);
+        response.sendStatus(200);
+      } else {
+        response.sendStatus(400);
       }
     });
 

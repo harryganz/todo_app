@@ -74,5 +74,17 @@ describe('Post to /items', function(){
       get('/items.json').
       expect(/newItem/i, done);
   });
-  
-})
+});
+
+describe('Delete an item', function(){
+  it('Returns a 200 status code', function(done){
+    request(app).
+      delete('/items/1').
+      expect(200, done);
+  });
+  it('returns a 400 status if item id not found', function(done){
+    request(app).
+      delete('/items/200').
+      expect(400, done);
+  });
+});
