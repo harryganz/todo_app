@@ -20,7 +20,7 @@
     "update-webdriver": "webdriver-manager update",
     "preprotractor": "./bin/www & npm run update-webdriver",
     "protractor": "protractor tests/protractor.conf.js",
-    "postprotractor":"fuser -k 3000/tcp",
+    "postprotractor": "fuser -k 3000/tcp",
     "mocha": "mocha tests/backend/backendSpec.js -w",
     "mocha-single": "mocha tests/backend/backendSpec.js"
   },
@@ -41,6 +41,8 @@
     "body-parser": "^1.14.1",
     "bower": "~1.5.3",
     "express": "~4.13.3",
-    "express-negotiate": "0.0.5"
+    "express-negotiate": "0.0.5",
+    "pg": "4.4.3",
+    "pg-query": "^0.11.0"
   }
 }
