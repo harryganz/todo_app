@@ -1,5 +1,16 @@
 var app = require('./../../app');
 var request = require('supertest');
+var pg = require('pg');
+var query = require('pg-query');
+
+// Functions to start and rollback test database
+var set_up = function(){
+  query('BEGIN;')
+}
+
+var clean_up = function(){
+  query('ROLLBACK;')
+}
 
 describe('Request to static index page', function(){
   it('returns a 200 status code', function(done){
@@ -50,6 +61,9 @@ describe('Request to /items.json', function(){
 });
 
 describe('Post to /items', function(){
+  before(set_up);
+  after(clean_up);
+
   var item = {
     'name':'newItem',
     'description':'A new item'
@@ -77,6 +91,9 @@ describe('Post to /items', function(){
 });
 
 describe('Delete an item', function(){
+  before(set_up);
+  after(clean_up);
+
   it('Returns a 200 status code', function(done){
     request(app).
       delete('/items/1').

@@ -21,8 +21,8 @@
     "preprotractor": "./bin/www & npm run update-webdriver",
     "protractor": "protractor tests/protractor.conf.js",
     "postprotractor": "fuser -k 3000/tcp",
-    "mocha": "mocha tests/backend/backendSpec.js -w",
-    "mocha-single": "mocha tests/backend/backendSpec.js"
+    "mocha": "NODE_ENV=test mocha tests/backend/backendSpec.js -w",
+    "mocha-single": "NODE_ENV=test mocha tests/backend/backendSpec.js"
   },
   "author": "Harry Ganz <hganz@rsmas.miami.edu>",
   "license": "MIT",

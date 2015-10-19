@@ -12,8 +12,11 @@ var app = express();
 app.use(express.static('public'));
 
 // Database connection string
-query.connectionParameters = process.env.DATABASE_URL ||
-  "postgres://harry:Stegastes_variabilis@localhost/todo_development"
+if(process.env.NODE_ENV === 'test'){
+    query.connectionParameters = "postgres://harry:Stegastes_variabilis@localhost/todo_test";
+} else { query.connectionParameters = process.env.DATABASE_URL ||
+  "postgres://harry:Stegastes_variabilis@localhost/todo_development";
+}
 
 // More dynamic routes
 app.
